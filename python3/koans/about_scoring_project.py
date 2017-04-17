@@ -33,8 +33,56 @@ from runner.koan import *
 # Your goal is to write the score method.
 
 def score(dice):
-    # You need to write this method
-    pass
+
+    # Variable for the total score
+    score = 0;
+
+    # Create a dict: Received set of rolls will be keys and we will assign'0' value to each key:
+
+    # Example:
+    # rolls = {}.fromkeys(set([1,2,3,4,5]), 0);  --> {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+    # rolls = {}.fromkeys(set([1,2,2,1,4]), 0); --> {1: 0, 2: 0, 4: 0}
+    rolls = {}.fromkeys(set(dice),0);
+
+    # Count how many times appears a value in "dice" and increase the value in the dict for all the existing keys
+
+    # Example:
+    # set([1,2,2,1,4]) --> {1: 2, 2: 2, 4: 1}
+    for number in dice:
+        rolls[number] += 1
+
+    # First scoring condition: A set of three ones is 1000 points.
+    # If the "1" key exists and there are 3 or more "ones" in our rolls, add 1000 to the total score.
+    # Then subtract 3 from key "1" (we need to add 100 for all the "ones" that are not part of a set of three)
+
+    # Example
+    # If there are 5 ones ([1,1,1,1,1]) --> {1: 5}
+    # before: value = 5 score = 0,
+    # after: value = 2 score = 1000. Then we will add (2 * 100 + 1000) to the total score (see 3º condition)
+    if 1 in rolls and rolls[1] >= 3:
+       score += 1000
+       rolls[1] -= 3
+
+    # Second scoring condition: A set of three numbers (other than ones) is worth 100 times the number.
+    # If there are 3 or more "x" values in our rolls, add 100*x to the total score.
+    # Then subtract 3 from key "x" (we need to add 50 for all the "fives" that are not part of a set of three,
+    # as we did with "ones")
+    for number in rolls:
+        if rolls[number] >= 3:
+            score += number * 100
+            rolls[number] -= 3
+
+    # Finally, third and fourth scoring conditions:
+    for number in rolls:
+        # Third scoring condition: A one (that is not part of a set of three) is worth 100 points.
+        if number == 1:
+            score += 100 * rolls[number]
+        # Fourth scoring condition: A five (that is not part of a set of three) is worth 50 points.
+        elif number == 5:
+            score += 50 * rolls[number]
+
+    return score
+
 
 class AboutScoringProject(Koan):
     def test_score_of_an_empty_list_is_zero(self):
