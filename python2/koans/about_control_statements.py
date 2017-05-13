@@ -11,13 +11,13 @@ class AboutControlStatements(Koan):
             result = 'true value'
         else:
             result = 'false value'
-        self.assertEqual(__, result)
+        self.assertEqual('true value', result)
 
     def test_if_then_statements(self):
         result = 'default value'
         if True:
             result = 'true value'
-        self.assertEqual(__, result)
+        self.assertEqual('true value', result)
 
     def test_if_then_elif_else_statements(self):
         if False:
@@ -26,7 +26,7 @@ class AboutControlStatements(Koan):
             result = 'true value'
         else:
             result = 'default value'
-        self.assertEqual(__, result)
+        self.assertEqual('true value', result)
 
     def test_while_statement(self):
         i = 1
@@ -34,7 +34,9 @@ class AboutControlStatements(Koan):
         while i <= 10:
             result = result * i
             i += 1
-        self.assertEqual(__, result)
+        # 1*1=1 + 1*2=2 + 2*3=6 + 6*4=24 + 24*5=120 + 120*6=720 + 720*7=5040 + 5040*8=40320 + 40320*9=362880 +
+        # 362880*10=3628800
+        self.assertEqual(3628800, result)
 
     def test_break_statement(self):
         i = 1
@@ -43,7 +45,7 @@ class AboutControlStatements(Koan):
             if i > 10: break
             result = result * i
             i += 1
-        self.assertEqual(__, result)
+        self.assertEqual(3628800, result)
 
     def test_continue_statement(self):
         i = 0
@@ -52,14 +54,14 @@ class AboutControlStatements(Koan):
             i += 1
             if (i % 2) == 0: continue
             result.append(i)
-        self.assertEqual(__, result)
+        self.assertEqual([1, 3, 5, 7, 9], result)
 
     def test_for_statement(self):
         phrase = ["fish", "and", "chips"]
         result = []
         for item in phrase:
             result.append(item.upper())
-        self.assertEqual([__, __, __], result)
+        self.assertEqual(['FISH', 'AND', 'CHIPS'], result)
 
     def test_for_statement_with_tuples(self):
         round_table = [
@@ -73,7 +75,7 @@ class AboutControlStatements(Koan):
             result.append("Contestant: '" + knight + \
             "'   Answer: '" + answer + "'")
 
-        text = __
+        text = ("Contestant: 'Robin'   Answer: 'Blue! I mean Green!'")
 
         self.assertMatch(text, result[2])
 
