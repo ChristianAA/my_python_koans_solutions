@@ -18,11 +18,20 @@
 #   about_triangle_project_2.py
 
 def triangle(a, b, c):
-    if a == b == c:
+
+    sides = sorted([a, b, c])
+    unique_sides = sorted(set(sides))
+
+    if unique_sides[0] <= 0:
+        raise TriangleError('All sides should be greater than 0')
+    if sides[2] >= sides[0] + sides[1]:
+        raise TriangleError('The sum of any two sides should be greater than the third one')
+    if len(unique_sides) == 1:
         return 'equilateral'
-    elif a == b or a == c or b == c:
+    elif len(unique_sides) == 2:
         return 'isosceles'
-    return 'scalene'
+    elif len(unique_sides) == 3:
+        return 'scalene'
 
 # Error class used in part 2.  No need to change this code.
 class TriangleError(StandardError):
