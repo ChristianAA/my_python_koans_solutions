@@ -34,9 +34,30 @@ from runner.koan import *
 # Your goal is to write the score method.
 
 def score(dice):
-    # You need to write this method
-    pass
 
+    score = 0
+
+    rolls = {}.fromkeys(set(dice),0)
+
+    for number in dice:
+        rolls[number] += 1
+
+    if 1 in rolls and rolls[1] >= 3:
+       score += 1000
+       rolls[1] -= 3
+
+    for number in rolls:
+        if rolls[number] >= 3:
+            score += number * 100
+            rolls[number] -= 3
+
+    for number in rolls:
+        if number == 1:
+            score += 100 * rolls[number]
+        elif number == 5:
+            score += 50 * rolls[number]
+
+    return score
 
 class AboutScoringProject(Koan):
     def test_score_of_an_empty_list_is_zero(self):
