@@ -35,10 +35,10 @@ class AboutRegex(Koan):
 
         """
         string = "Hello, my name is Felix and this koans are based on the Ben's book: Regular Expressions in 10 minutes. Repeat My name is Felix"
-        m = re.match('Felix', string) #TIP: Maybe match it's not the best option
+        m = re.findall('Felix', string) #TIP: Maybe match it's not the best option
 
         # I want to know how many times appears my name
-        self.assertEqual(m, None)
+        self.assertEqual(len(m), 2)
 
     def test_matching_literal_text_not_case_sensitivity(self):
         """
@@ -113,7 +113,7 @@ class AboutRegex(Koan):
                 + "ca1.xls"
 
         # I want to find the name sam
-        change_this_search_string = 'sam.xls'
+        change_this_search_string = '[^nc]am.xls'
         self.assertEquals(re.findall(change_this_search_string, string), ['sam.xls'])
 
 
