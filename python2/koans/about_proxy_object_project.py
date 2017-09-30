@@ -21,15 +21,39 @@ from runner.koan import *
 
 class Proxy(object):
     def __init__(self, target_object):
-        # WRITE CODE HERE
+        self._messages = list()
 
         #initialize '_obj' attribute last. Trust me on this!
         self._obj = target_object
 
-    # WRITE CODE HERE
+    def __getattr__(self, name):
+        # print 'Debug GET ' + type(self).__name__ + "." + name + " dict=" + str(self.__dict__)
 
+        attr = getattr(self._obj, name)
 
-# The proxy object should pass the following Koan:
+        self._messages.append(name)
+        return attr
+
+    def __setattr__(self, name, value):
+        # print 'Debug SET ' + type(self).__name__ + "." + name + "=" + str(value) + "   __dict__=" + str(self.__dict__)
+
+        if '_' == name[0]:
+            return object.__setattr__(self, name, value)
+
+        setattr(self._obj, name, value)
+
+        self._messages.append(name + '=')
+
+    def messages(self):
+        return self._messages
+
+    def was_called(self, attr):
+        return self.number_of_times_called(attr) > 0
+
+    def number_of_times_called(self, attr):
+        return len(filter(lambda msg: msg == attr, self._messages))
+
+    # The proxy object should pass the following Koan:
 #
 class AboutProxyObjectProject(Koan):
     def test_proxy_method_returns_wrapped_object(self):
@@ -53,7 +77,7 @@ class AboutProxyObjectProject(Koan):
         tv.power()
         tv.channel = 10
 
-        self.assertEqual(['power', 'channel'], tv.messages())
+        self.assertEqual(['power', 'channel='], tv.messages())
 
     def test_proxy_handles_invalid_messages(self):
         tv = Proxy(Television())
@@ -83,7 +107,7 @@ class AboutProxyObjectProject(Koan):
         tv.power()
 
         self.assertEqual(2, tv.number_of_times_called('power'))
-        self.assertEqual(1, tv.number_of_times_called('channel'))
+        self.assertEqual(1, tv.number_of_times_called('channel='))
         self.assertEqual(0, tv.number_of_times_called('is_on'))
 
     def test_proxy_can_record_more_than_just_tv_objects(self):
